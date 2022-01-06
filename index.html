@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pass Filter</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+    <h1>音楽を周波数で分ける</h1>
+    <button id="click-start">クリックしてスタート</button>
+
+    <ol class="how-to-use">
+        <li>「クリックしてスタート」ボタンを押す</li>
+        <li>「ファイルを選択」から音楽ファイルを選択</li>
+        <li>「Filter」にチェック</li>
+        <li>「VOLUME」をいじってみる</li>
+    </ol>
+
+    <div class="container">
+        <div class="item">
+            <h2>Control Audio</h2>
+            <dl>
+                <dt><label for="file-upload-audio">SELECT AUDIO FILE : <span
+                            id="progress-file-upload-audio"></span></label>
+                </dt>
+                <dd><input type="file" id="file-upload-audio" accept="audio/*" /></dd>
+                <dt><label for="range-volume-low">Lowpass VOLUME : <span id="output-volume-low">1</span></label></dt>
+                <dd><input type="range" id="range-volume-low" value="1" min="0" max="1" step="0.05" /></dd>
+                <dt><label for="range-volume-high">Highpass VOLUME : <span id="output-volume-high">1</span></label></dt>
+                <dd><input type="range" id="range-volume-high" value="1" min="0" max="1" step="0.05" /></dd>
+                <dt><label for="range-playback-rate">PLAYBACK RATE : <span id="output-playback-rate">1</span></label>
+                </dt>
+                <dd><input type="range" id="range-playback-rate" value="1" min="0.05" max="2" step="0.05" /></dd>
+                <dt><label><input type="checkbox" /> LOOP</label></dt>
+            </dl>
+        </div>
+
+        <div class="item">
+            <h2>Control Filter</h2>
+            <dl>
+                <dt><label><input type="checkbox" id="toggle-effect" /> Filter</label></dt>
+                <dt><label for="range-filter-low">Lowpass CUTOFF : <span id="output-filter-low">1500</span>
+                        Hz</label></dt>
+                <dd><input type="range" id="range-filter-low" value="1500" min="20" max="8000" step="1" /></dd>
+                <dt><label for="range-filter-high">Highpass CUTOFF : <span id="output-filter-high">1500</span>
+                        Hz</label></dt>
+                <dd><input type="range" id="range-filter-high" value="1500" min="20" max="8000" step="1" /></dd>
+            </dl>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>
