@@ -175,27 +175,101 @@
                 }
             }, false);
 
-            // Control Master Volume filterL
-            document.getElementById('range-volume-low').addEventListener('input', function () {
-                var min = gainL.gain.minValue || 0;
-                var max = gainL.gain.maxValue || 1;
 
-                if ((this.valueAsNumber >= min) && (this.valueAsNumber <= max)) {
-                    gainL.gain.value = this.valueAsNumber;
-                    document.getElementById('output-volume-low').textContent = this.value;
+            /* microphone */
+            var analyser = context.createAnalyser();
+            analyser.smoothingTimeConstant = 0.65; //落ち着くまでの時間
+            analyser.fftSize = 2048; //音域の数
+            var bufferLength = analyser.frequencyBinCount;
+            //↓の配列に音域ごとの大きさが入る
+            var dataArray = new Uint8Array(bufferLength);
+            analyser.getByteTimeDomainData(dataArray);
+
+            var sourceEn = null;
+
+            //マイクの音を拾う
+            navigator.webkitGetUserMedia(
+                { audio: true },
+                function (stream) {
+                    sourceEn = context.createMediaStreamSource(stream);
+                    sourceEn.connect(analyser);
+                    getAudio();
+                },
+                function (err) {
+                    console.log(err);
                 }
-            }, false);
+            );
+            //dataArrayに音域情報を入れる。繰り返す
+            function getAudio() {
+                requestAnimationFrame(getAudio);
+                analyser.getByteFrequencyData(dataArray);
+                // console.log(dataArray);
+            }
+
+            var numberL = Array(100).fill(0);
+            var numberH = Array(100).fill(0);
+
+            // Control Master Volume filterL
+            document.getElementById('button-volume-low').addEventListener('click',
+                function volumeL() {
+                    requestAnimationFrame(volumeL);
+                    analyser.getByteFrequencyData(dataArray);
+                    var sumL1 = dataArray.slice(0, 70).reduce(function (a, x) {
+                        return a + x;
+                    });
+                    var averageL1 = sumL1 / bufferLength;
+
+                    numberL.shift();
+                    numberL.push(averageL1);
+
+                    var sumL2 = numberL.reduce(function (a, x) {
+                        return a + x;
+                    });
+                    var averageL2 = sumL2 / 100;
+                    var systemL = averageL2 * 5;
+
+                    if ((systemL >= 0) && (systemL <= 2)) {
+                        gainL.gain.value = systemL;
+                        document.getElementById('output-volume-low').textContent = Math.round(systemL * 10000) / 10000;
+                    } else if (2 < systemL) {
+                        gainL.gain.value = 2;
+                        document.getElementById("output-volume-low").textContent = 2;
+                    } else {
+                        gainL.gain.value = 0;
+                        document.getElementById("output-volume-low").textContent = 0;
+                    }
+                }, false);
 
             // Control Master Volume filterH
-            document.getElementById('range-volume-high').addEventListener('input', function () {
-                var min = gainH.gain.minValue || 0;
-                var max = gainH.gain.maxValue || 1;
+            document.getElementById('button-volume-high').addEventListener('click',
+                function volumeH() {
+                    requestAnimationFrame(volumeH);
+                    analyser.getByteFrequencyData(dataArray);
+                    var sumH1 = dataArray.slice(70, 1023).reduce(function (a, x) {
+                        return a + x;
+                    });
+                    var averageH1 = sumH1 / bufferLength;
 
-                if ((this.valueAsNumber >= min) && (this.valueAsNumber <= max)) {
-                    gainH.gain.value = this.valueAsNumber;
-                    document.getElementById('output-volume-high').textContent = this.value;
-                }
-            }, false);
+                    numberH.shift();
+                    numberH.push(averageH1);
+
+                    var sumH2 = numberH.reduce(function (a, x) {
+                        return a + x;
+                    });
+                    var averageH2 = sumH2 / 100;
+                    var systemH = averageH2 * 5;
+
+                    if ((systemH >= 0) && (systemH <= 2)) {
+                        gainH.gain.value = systemH;
+                        document.getElementById('output-volume-high').textContent = Math.round(systemH * 10000) / 10000;
+                    } else if (2 < systemH) {
+                        gainH.gain.value = 2;
+                        document.getElementById("output-volume-high").textContent = 2;
+                    } else {
+                        gainH.gain.value = 0;
+                        document.getElementById("output-volume-high").textContent = 0;
+                    }
+                }, false);
 
             // Control playbackRate
             document.getElementById('range-playback-rate').addEventListener('input', function () {
