@@ -15,7 +15,7 @@
         <li>「クリックしてスタート」ボタンを押す</li>
         <li>「ファイルを選択」から音楽ファイルを選択</li>
         <li>「Filter」にチェック</li>
-        <li>「VOLUME」をいじってみる</li>
+        <li>「VOLUME」のボタンを押す <span class="red">※両方押すとうまくいかないかも</span></li>
     </ol>
 
     <div class="container">
@@ -26,10 +26,10 @@
                             id="progress-file-upload-audio"></span></label>
                 </dt>
                 <dd><input type="file" id="file-upload-audio" accept="audio/*" /></dd>
-                <dt><label for="range-volume-low">Lowpass VOLUME : <span id="output-volume-low">1</span></label></dt>
-                <dd><input type="range" id="range-volume-low" value="1" min="0" max="1" step="0.05" /></dd>
-                <dt><label for="range-volume-high">Highpass VOLUME : <span id="output-volume-high">1</span></label></dt>
-                <dd><input type="range" id="range-volume-high" value="1" min="0" max="1" step="0.05" /></dd>
+                <dt><label for="button-volume-low">Lowpass VOLUME : <span id="output-volume-low">1</span></label></dt>
+                <dd><input type="button" id="button-volume-low" class="button2" value="Connect Microphone" /></dd>
+                <dt><label for="button-volume-high">Highpass VOLUME : <span id="output-volume-high">1</span></label></dt>
+                <dd><input type="button" id="button-volume-high" class="button2" value="Connect Microphone" /></dd>
                 <dt><label for="range-playback-rate">PLAYBACK RATE : <span id="output-playback-rate">1</span></label>
                 </dt>
                 <dd><input type="range" id="range-playback-rate" value="1" min="0.05" max="2" step="0.05" /></dd>
