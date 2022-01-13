@@ -28,7 +28,7 @@
             filterL.frequency.value = document.getElementById('range-filter-low').valueAsNumber;
             filterL.Q.value = 1;
             var filterH = context.createBiquadFilter();
-            filterL.type = "highpass";
+            filterH.type = "highpass";
             filterH.frequency.value = document.getElementById('range-filter-high').valueAsNumber;
             filterH.Q.value = 1;
 
